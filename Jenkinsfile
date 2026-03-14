@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        // Sustituye con tu usuario de DockerHub
+        // Hola
         DOCKERHUB_USER = juanjociber
         APP_NAME = 'proyecto-ci-cd'
     }
