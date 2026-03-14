@@ -1,12 +1,5 @@
 pipeline {
-    agent {
-        
-        docker { 
-            image 'python:3.9-slim' 
-            args '-u root' 
-        }
-    }
-
+    agent any
     environment {
         DOCKERHUB_USER = 'juanjociber'
         APP_NAME = 'proyecto-ci-cd'
@@ -20,10 +13,8 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh '''
-                    pip install flask pytest
-                    pytest
-                '''
+                sh 'pip3 install flask pytest'
+                sh 'pytest'
             }
         }
         stage('Build Image') {
