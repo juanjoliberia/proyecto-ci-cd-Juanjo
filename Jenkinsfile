@@ -15,12 +15,15 @@ pipeline {
         }
 
         stage('Test') {
-            steps {
-                sh 'pip install flask pytest'
-                sh 'pytest test_app.py'
-            }
-        }
-
+    steps {
+        sh '''
+            apk add --no-cache python3 py3-pip
+            python3 -m pip install --upgrade pip
+            pip install flask pytest
+            pytest
+        '''
+    }
+}
         stage('Build Image') {
             steps {
                 sh "docker build -t ${DOCKERHUB_USER}/${APP_NAME}:latest ."
