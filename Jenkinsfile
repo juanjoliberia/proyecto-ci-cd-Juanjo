@@ -17,9 +17,13 @@ pipeline {
         stage('Test') {
     steps {
         sh '''
-            apk add --no-cache python3 py3-pip
-            python3 -m pip install --upgrade pip
-            pip install flask pytest
+
+            apt-get update && apt-get install -y python3 python3-pip
+            
+        
+            pip3 install --break-system-packages flask pytest
+            
+          
             pytest
         '''
     }
