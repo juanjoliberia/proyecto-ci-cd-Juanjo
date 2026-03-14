@@ -12,11 +12,19 @@ pipeline {
             }
         }
         stage('Test') {
-            steps {
-                sh 'pip3 install flask pytest'
-                sh 'pytest'
-            }
-        }
+    steps {
+        sh '''
+           
+            apt-get update && apt-get install -y python3 python3-pip
+            
+           
+            pip3 install flask pytest --break-system-packages
+            
+           
+            pytest
+        '''
+    }
+}
         stage('Build Image') {
             steps {
                 sh "docker build -t ${DOCKERHUB_USER}/${APP_NAME}:latest ."
