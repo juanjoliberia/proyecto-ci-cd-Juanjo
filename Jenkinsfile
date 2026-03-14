@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Hola
-        DOCKERHUB_USER = juanjociber
+        DOCKERHUB_USER = 'juanjociber'
         APP_NAME = 'proyecto-ci-cd'
     }
 
