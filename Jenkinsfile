@@ -1,43 +1,31 @@
 pipeline {
-    agent any
-    environment {
-        DOCKERHUB_USER = 'juanjociber'
-        APP_NAME = 'proyecto-ci-cd'
+    agent {
+        docker { 
+            image 'python:3.9-slim' 
+            // Esto le dice a Jenkins que use una imagen que YA tiene todo
+        }
     }
-
     stages {
-        stage('Clone') {
+        stage('Test') {
             steps {
-                checkout scm
+                // Ya no necesitamos apt-get. pip viene instalado en python:3.9-slim
+                sh 'pip install flask pytest'
+                sh 'pytest'
             }
         }
-        stage('Test') {
-    steps {
-        sh '''
-           
-            apt-get update && apt-get install -y python3 python3-pip
-            
-           
-            pip3 install flask pytest --break-system-packages
-            
-           
-            pytest
-        '''
-    }
-}
         stage('Build Image') {
             steps {
-                sh "docker build -t ${DOCKERHUB_USER}/${APP_NAME}:latest ."
+                // Aquí el comando docker build funcionará si tu Jenkins tiene acceso al socket de Docker
+                sh "docker build -t juanjociber/proyecto-ci-cd:latest ."
             }
         }
-
         stage('DockerHub') {
             steps {
-                
-                sh "docker push ${DOCKERHUB_USER}/${APP_NAME}:latest"
+                sh "docker push juanjociber/proyecto-ci-cd:latest"
             }
         }
-
+    }
+}
         stage('Deploy') {
             steps {
              
