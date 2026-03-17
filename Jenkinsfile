@@ -15,32 +15,32 @@ pipeline {
 
         stage('Test') {
             steps {
-                // Usamos comandos de Python que no requieren ser Root
+                // Instalación local para evitar errores de permisos
                 sh 'pip install --user flask pytest'
                 sh 'python3 -m pytest'
             }
         }
 
-        stage('Build Image') {
+        stage('Build') {
             steps {
-                // Si esto falla por permisos de Docker, al menos el Test ya habrá pasado
-                sh "docker build -t ${DOCKERHUB_USER}/${APP_NAME}:latest ."
+                echo "Simulando Build para verificar que el pipeline funciona"
+                sh "echo 'Construyendo imagen para ${DOCKERHUB_USER}/${APP_NAME}'"
             }
         }
 
         stage('Push to DockerHub') {
             steps {
-                // Recuerda que esto requiere haber hecho 'docker login' previamente en el servidor
-                sh "docker push ${DOCKERHUB_USER}/${APP_NAME}:latest"
+                echo "Simulando Push a DockerHub"
+                // Descomenta la línea de abajo cuando el servidor tenga Docker configurado
+                // sh "docker push ${DOCKERHUB_USER}/${APP_NAME}:latest"
             }
         }
-    }
-}
+
         stage('Deploy') {
             steps {
-             
-                sh 'kubectl apply -f deployment.yaml'
-                sh 'kubectl apply -f service.yaml'
+                echo "Simulando despliegue en Kubernetes"
+                // sh 'kubectl apply -f deployment.yaml'
+                // sh 'kubectl apply -f service.yaml'
             }
         }
     }
