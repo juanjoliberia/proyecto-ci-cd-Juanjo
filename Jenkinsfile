@@ -1,26 +1,18 @@
 pipeline {
     agent any
-
     stages {
         stage('Checkout') {
-            steps {
-                checkout scm
-            }
+            steps { checkout scm }
         }
-
-        stage('Preparacion') {
+        stage('Deploy & Run') {
             steps {
-                echo "Saltando instalaciones conflictivas para asegurar el exito..."
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                // Esto es lo que realmente hace que la web funcione
-                sh 'kubectl apply -f deployment.yaml'
-                sh 'kubectl apply -f service.yaml'
-                echo "Despliegue completado. Ya puedes mirar el navegador."
+                script {
+                    echo "Iniciando servidor Python..."
+                    // Intentamos lanzar el servidor en segundo plano
+                    sh 'nohup python3 app.py > output.log 2>&1 &'
+                }
             }
         }
     }
+}
 }
